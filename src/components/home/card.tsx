@@ -10,15 +10,16 @@ interface CardProps {
 
 export function Card({ icon, title, description, textFooter }: CardProps) {
   return (
-    <CardRoot w={80} _hover={{ borderColor: "yellow.500/30" }} cursor="pointer">
+    <CardRoot borderRadius="2xl" w={80} _hover={{ borderColor: "yellow.500/30" }} cursor="pointer">
       <CardBody gap={2}>
         <Flex
+        
           w={12}
           h={12}
           align="center"
           justify="center"
           bgColor="yellow.300"
-          rounded="lg"
+          rounded="xl"
         >
           {icon}
         </Flex>
