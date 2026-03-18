@@ -1,6 +1,7 @@
 "use client"
 
 import { Button, ButtonGroup, Heading, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { LuArrowLeft } from "react-icons/lu";
 
 export default function Agendar() {
@@ -9,18 +10,29 @@ export default function Agendar() {
     count: items.length,
   });
 
+  const router = useRouter();
+
+  const hasBack = steps.value > 1;
+
+  function handleNavigationToStep() {
+    if (steps.value > 0) {
+      steps.goToPrevStep()
+    } else {
+      router.push("/")
+    }
+  }
+
   return (
     <VStack as="main" gap={0}>
-      <VStack w="100vw" as="section" pt={28} pb={16} px={6}>
-        <Button variant="ghost" rounded="lg" asChild>
-          <a href="/">
-            <LuArrowLeft />
-            Inicio
-          </a>
+      <VStack w="100vw" as="section" align="start" pt={28} pb={16} px={6}>
+        <Button onClick={handleNavigationToStep} variant="ghost" rounded="lg" mb={6} >
+          <LuArrowLeft />
+          {steps.value > 1 ? "Voltar" : "Inicio"}
         </Button>
 
         <Heading as="h1" fontSize="4xl">Agendar Serviço</Heading>
-        <Text>Passo 1 de 3</Text>
+
+        <Text>Passo {steps.value} de {items.length}</Text>
 
         <Steps.RootProvider value={steps}>
           <Steps.List>
