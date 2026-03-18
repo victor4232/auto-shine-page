@@ -1,6 +1,8 @@
 import { Provider } from "@/components/ui/provider";
 
 import "../styles/globals.css"
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 
 export default function RootLayout({
   children,
@@ -10,7 +12,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <Header />
+          {children}
+          <Footer />
+        </Provider>
       </body>
     </html>
   );
