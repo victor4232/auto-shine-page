@@ -11,8 +11,6 @@ import { Card } from "@/components/home/card";
 
 export default function Home() {
 
-
-
   return (
     <VStack as="main" gap={0}>
       <VStack
