@@ -21,7 +21,7 @@ export default function Agendar() {
       router.push("/")
     }
   }
-
+  
   return (
     <VStack as="main" gap={0}>
       <VStack w="100vw" as="section" align="start" pt={28} pb={16} px={6}>
