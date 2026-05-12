@@ -1,5 +1,6 @@
 import { CardBody, CardFooter, CardRoot, Flex, Heading, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
+import { LuSparkles } from "react-icons/lu";
 
 interface CardProps {
   icon: ReactNode;
@@ -10,16 +11,15 @@ interface CardProps {
 
 export function Card({ icon, title, description, textFooter }: CardProps) {
   return (
-    <CardRoot borderRadius="2xl" w={80} _hover={{ borderColor: "yellow.500/30" }} cursor="pointer">
+    <CardRoot w={80} _hover={{ borderColor: "yellow.500/30" }} cursor="pointer">
       <CardBody gap={2}>
         <Flex
-        
           w={12}
           h={12}
           align="center"
           justify="center"
           bgColor="yellow.300"
-          rounded="xl"
+          rounded="lg"
         >
           {icon}
         </Flex>
