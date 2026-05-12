@@ -1,7 +1,7 @@
-
 'use client'
 
-import { HStack, Link as ChakraLink, Text, Icon, Button, VStack, Image as ChakraImage, Heading, Flex, CardRoot, CardBody, CardFooter, CardHeader } from "@chakra-ui/react";
+import { HStack, Text, Button, VStack, Image as ChakraImage, Heading, Flex, CardRoot, CardBody, CardFooter, CardHeader } from "@chakra-ui/react";
+
 import { LuArrowRight, LuCar, LuClock, LuShield, LuSparkles, LuStar, LuStarHalf } from "react-icons/lu";
 
 import heroCar from "../../public/assets/hero-car.jpg";
@@ -10,7 +10,6 @@ import { Tag } from "@/components/ui/tag";
 import { Card } from "@/components/home/card";
 
 export default function Home() {
-
   return (
     <VStack as="main" gap={0}>
       <VStack
@@ -115,10 +114,8 @@ export default function Home() {
             Agendar Serviço
             <LuArrowRight />
           </a>
-
         </Button>
       </VStack>
     </VStack>
-
   );
 }

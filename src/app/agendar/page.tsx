@@ -1,64 +1,135 @@
 "use client"
 
-import { Button, ButtonGroup, Heading, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
+import { Button, DatePicker, Field, Heading, HStack, Portal, RadioCard, Separator, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { LuArrowLeft } from "react-icons/lu";
+import { LuArrowLeft, LuCalendar } from "react-icons/lu";
+
+import { motion } from "motion/react";
+import { ServiceCardItem } from "@/components/ui/service-card-item";
+import { useState } from "react";
 
 export default function Agendar() {
   const steps = useSteps({
-    defaultStep: 1,
+    defaultStep: 0,
     count: items.length,
   });
 
   const router = useRouter();
 
-  const hasBack = steps.value > 1;
-
-  function handleNavigationToStep() {
-    if (steps.value > 0) {
-      steps.goToPrevStep()
+  function handleGoToPrevStep() {
+    if (steps.hasPrevStep) {
+      steps.goToPrevStep();
     } else {
-      router.push("/")
+      router.push("/");
     }
   }
 
+  const [value, setValue] = useState<string | null>(null)
+
   return (
     <VStack as="main" gap={0}>
-      <VStack w="100vw" as="section" align="start" pt={28} pb={16} px={6}>
-        <Button onClick={handleNavigationToStep} variant="ghost" rounded="lg" mb={6} >
+      <VStack w="100%" maxW={1440} mx="auto" as="section" align="start" pt={28} pb={16} px={6}>
+        <Button onClick={handleGoToPrevStep} variant="ghost" rounded="lg" mb={6}>
           <LuArrowLeft />
-          {steps.value > 1 ? "Voltar" : "Inicio"}
+          {steps.hasPrevStep ? "Voltar" : "Inicio"}
         </Button>
 
-        <Heading as="h1" fontSize="4xl">Agendar Serviço</Heading>
+        <Heading as="h1" fontSize="4xl" mb={2}>Agendar Serviço</Heading>
 
-        <Text>Passo {steps.value} de {items.length}</Text>
+        {!steps.isCompleted && <Text mb={8}>Passo {steps.value + 1} de {steps.count}</Text>}
 
-        <Steps.RootProvider value={steps}>
-          <Steps.List>
+        {steps.isCompleted && <Text mb={8}>Completo!</Text>}
+
+        <Steps.RootProvider value={steps} gap={10}>
+          <Steps.List gap={4}>
             {items.map((step, index) => (
-              <Steps.Item key={index} index={index} title={step.title}>
-                <Steps.Indicator />
-                <Steps.Title>{step.title}</Steps.Title>
-                <Steps.Separator />
+              <Steps.Item flex={1} key={index} index={index} title={step.title}>
+                <Separator w="100%" borderColor={steps.value >= index ? "yellow.500" : "white"} borderWidth={2} />
               </Steps.Item>
             ))}
           </Steps.List>
+
           {items.map((step, index) => (
             <Steps.Content key={index} index={index}>
-              {step.description}
+              {index === 0 && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                  <Heading as="h2" fontSize="2xl" fontWeight="semibold" color="yellow.300" mb={4}>Escolha o Serviço</Heading>
+
+                  <RadioCard.Root value={value} onValueChange={(e) => setValue(e.value)} gapY={4}>
+                    <ServiceCardItem value="polimento-premium" name="Polimento Premium" duration="3h" price="1200,00" />
+
+                    <ServiceCardItem value="vitrificacao" name="Vitrificação" duration="5h" price="800,00" />
+
+                    <ServiceCardItem value="lavagem-detalhada" name="Lavagem Detalhada" duration="1h30" price="120,00" />
+
+                    <ServiceCardItem value="higienizacao-interna" name="Higienização Interna" duration="2h" price="250,00" />
+                  </RadioCard.Root>
+                </motion.div>
+              )}
+
+              {index === 1 && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                  <Heading as="h2" fontSize="2xl" fontWeight="semibold" color="yellow.300" mb={4}>Data e Horário</Heading>
+
+                  <Field.Root>
+                    <Field.Label>Data</Field.Label>
+                    <Field.Context>
+                      {(ctx) => (
+                        <DatePicker.Root
+                          invalid={ctx.invalid}
+                          ids={{ label: () => ctx.ids.label, input: () => ctx.ids.control }}
+                        >
+                          <DatePicker.Control>
+                            <DatePicker.Input />
+                            <DatePicker.IndicatorGroup>
+                              <DatePicker.Trigger>
+                                <LuCalendar />
+                              </DatePicker.Trigger>
+                            </DatePicker.IndicatorGroup>
+                          </DatePicker.Control>
+                          <Portal>
+                            <DatePicker.Positioner>
+                              <DatePicker.Content>
+                                <DatePicker.View view="day">
+                                  <DatePicker.Header />
+                                  <DatePicker.DayTable />
+                                </DatePicker.View>
+                                <DatePicker.View view="month">
+                                  <DatePicker.Header />
+                                  <DatePicker.MonthTable />
+                                </DatePicker.View>
+                                <DatePicker.View view="year">
+                                  <DatePicker.Header />
+                                  <DatePicker.YearTable />
+                                </DatePicker.View>
+                              </DatePicker.Content>
+                            </DatePicker.Positioner>
+                          </Portal>
+                        </DatePicker.Root>
+                      )}
+                    </Field.Context>
+                    <Field.ErrorText>Date of birth is required</Field.ErrorText>
+                  </Field.Root>
+                </motion.div>
+              )}
+
+              {index === 2 && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                  <Heading as="h2" fontSize="2xl" fontWeight="semibold" color="yellow.300" mb={4}>Seus Dados</Heading>
+
+
+                </motion.div>
+              )}
             </Steps.Content>
           ))}
+
           <Steps.CompletedContent>All steps are complete!</Steps.CompletedContent>
 
-          <ButtonGroup size="sm" variant="outline">
-            <Steps.PrevTrigger asChild>
-              <Button>Prev</Button>
-            </Steps.PrevTrigger>
+          <HStack w="100%" justify="end">
             <Steps.NextTrigger asChild>
-              <Button>Next</Button>
+              <Button size="lg" colorPalette="yellow" rounded="lg" disabled={!value}>Continuar</Button>
             </Steps.NextTrigger>
-          </ButtonGroup>
+          </HStack>
         </Steps.RootProvider>
       </VStack>
     </VStack>
